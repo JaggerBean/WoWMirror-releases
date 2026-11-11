@@ -1,0 +1,43 @@
+# Copies each new !Mirror Companion from mirror.stepcraft.org (where tools\release.ps1 publishes it) into a release
+# here, which OneStop installs from. Checks every hour; run it by hand from the Actions tab to copy right away.
+name: Copy new versions
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy the newest version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          base=https://mirror.stepcraft.org/updates
+          curl -fsS --retry 3 "$base/latest.yml" -o latest.yml
+          field() { sed -n "s/^$1: *//p" latest.yml | head -1 | tr -d "'\"\r" | sed 's/ *$//'; }
+          version=$(field version); file=$(field path); sha=$(field sha512); when=$(field releaseDate)
+          [ -n "$version" ] && [ -n "$file" ] && [ -n "$sha" ] || { echo "::error::latest.yml is missing version, path or sha512"; exit 1; }
+          if gh release view "v$version" > /dev/null 2>&1; then
+            echo "!Mirror Companion $version is already here"
+          else
+            curl -fsS --retry 3 "$base/$file" -o "$file"
+            got=$(openssl dgst -sha512 -binary "$file" | base64 -w0)
+            [ "$got" = "$sha" ] || { echo "::error::$file doesn't match the checksum in latest.yml"; exit 1; }
+            notes="!Mirror Companion $version, published ${when:-on mirror.stepcraft.org}. It installs and updates the !Mirror addon by itself."
+            gh release create "v$version" "$file" launcher.json --title "!Mirror Companion $version" --notes "$notes"
+            echo "Copied $version"
+          fi
+          # GitHub turns hourly jobs off after 60 days without a commit; an empty commit now and then keeps this one on
+          if [ $(( $(date +%s) - $(git log -1 --format=%ct) )) -gt $(( 45 * 86400 )) ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -q --allow-empty -m "Keep the hourly copy running"
+            git push -q
+          fi

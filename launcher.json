@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "id": "mirror",
+  "name": "!Mirror",
+  "type": "app",
+  "author": "Jagger",
+  "description": "Mirror your WoW: Forever UI (addon settings, keybinds, macros, Edit Mode layouts) to friends' accounts, and keep your addons and settings in sync between your own PCs. Installs !Mirror Companion, which installs and updates the !Mirror addon for you.",
+  "asset": ".exe",
+  "installArgs": ["/S"],
+  "detectName": "!Mirror Companion",
+  "tags": ["WoW: Forever", "Addon", "Sync"],
+  "homepage": "https://mirror.stepcraft.org"
+}
