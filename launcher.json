@@ -7,7 +7,7 @@
   "author": "Jagger",
   "description": "Mirror your WoW: Forever UI (addon settings, keybinds, macros, Edit Mode layouts) to friends' accounts, and keep your addons and settings in sync between your own PCs. Sign in on the !Mirror tab in OneStop for PC sync and sharing.",
   "folders": ["!Mirror"],
-  "zipName": "!Mirror",
+  "zipName": "Mirror",
   "releasesRepo": "JaggerBean/WoWMirror-releases",
   "exclude": [],
   "preserve": ["!Mirror/Local.lua"],
