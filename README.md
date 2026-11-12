@@ -1,9 +1,10 @@
 # !Mirror releases
 
-Downloads of **!Mirror Companion** for [OneStop](https://github.com/JaggerBean/OneStop-releases). The app installs and
-keeps the in-game **!Mirror** addon updated (WoW: Forever), and syncs your setup between your PCs and with friends.
+Downloads of the **!Mirror** addon (WoW: Forever) for [OneStop](https://github.com/JaggerBean/OneStop-releases).
+OneStop installs and updates it, and its **!Mirror** tab does the online part: syncing your addons and settings
+between your PCs and sharing your setup with friends (through mirror.stepcraft.org).
 
-Install it from OneStop, from the [latest release](../../releases/latest), or from https://mirror.stepcraft.org.
+Each release has `!Mirror-<version>.zip` (the `!Mirror` folder for `Interface\AddOns`) and `launcher.json`.
+Releases are published with `tools\release.ps1` in the !Mirror source repo. Nothing is built here.
 
-Every hour, a job here copies the newest version from mirror.stepcraft.org into a release, after checking that the
-file matches the checksum the server publishes (`.github/workflows/copy.yml`). Nothing is built here.
+The separate !Mirror Companion app (v0.3.0 and earlier) is retired: OneStop does its job and can remove it.
